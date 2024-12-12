@@ -21,7 +21,6 @@ classifiers = [
   "Programming Language :: Python"
 ]
 dependencies = [
-  "multicast_expert>=1.4.0",
 ]
 
 [tool.setuptools]
