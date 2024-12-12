@@ -79,9 +79,10 @@ psn_info_packet_bytes = pypsn.prepare_psn_info_packet_bytes(psn_info)
 # send the PSN info via multicast
 pypsn.send_psn_packet(
     psn_packet=psn_info_packet_bytes,
-    mcast_ip="236.10.10.10",
-    ip_addr="192.168.1.42",
-    mcast_port=56565,
+    iface_ip="192.168.1.42",
+    port=56565,
+    mcast_grp="236.10.10.10",
+    time_to_live=31,
 )
 
 ```
