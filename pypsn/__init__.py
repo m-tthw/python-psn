@@ -675,9 +675,6 @@ def send_psn_packet(
         mcast_ip (str, optional): multicastip. Default: "236.10.10.10"
         time_to_live (int, optional): time to live (TTL) of sent
         packets. Defaults to 31 (maximum recommended for local network).
-
-    Raises:
-        AttributeError
     """
 
     output_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
