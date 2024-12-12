@@ -48,7 +48,7 @@ receiver.stop() # stop receiving
 
 ```
 
-### Sending PSN data
+### Sending PSN data (IPV4 only)
 ```python
 import pypsn
 
