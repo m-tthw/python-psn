@@ -656,11 +656,9 @@ def prepare_psn_data_packet_bytes(data_packet: PsnDataPacket):
 
 def send_psn_packet(
     psn_packet,
-    iface_name="",
     iface_ip="127.0.0.1",
     port=56565,
     mcast_grp="236.10.10.10",
-    transmit_block_size=9216,
     time_to_live=31,
 ):
     """Send psn packet.
@@ -672,21 +670,15 @@ def send_psn_packet(
 
     Args:
         psn_packet (bytes): Use binary/bytes, not text/strings for data
-        iface_name (str, optional): local interface name
         iface_ip (str, optional): local interface ip. Default: 127.0.0.1
         port (int, optional): udp port. Default: 56565
         mcast_ip (str, optional): multicastip. Default: "236.10.10.10"
-        transmit_block_size (int, optional): max udp packet (65535) -
-        udp header (8) - ip header (20) = 65507. Defaults to 65507.
         time_to_live (int, optional): time to live (TTL) of sent
         packets. Defaults to 31 (maximum recommended for local network).
 
     Raises:
         AttributeError
     """
-
-    if not iface_name:
-        iface_name = socket.inet_ntoa(pack("i", socket.INADDR_ANY))
 
     output_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
     output_socket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, time_to_live)
@@ -695,10 +687,10 @@ def send_psn_packet(
         ip_addr = mcast_grp
 
         if sys.platform == "win32":
-            mreq = struct.pack(
-                "4s4s", socket.inet_aton(mcast_grp), socket.inet_aton(iface_ip)
+            ip_mreq = socket.inet_aton(mcast_grp) + socket.inet_aton(iface_ip)
+            output_socket.setsockopt(
+                socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, ip_mreq
             )
-            output_socket.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
 
         # disable Path MTU Discovery (PMTUD) as it doesn't address multicast
         # and silently drops any IP packets > a remote network's MTU
